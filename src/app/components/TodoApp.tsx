@@ -1,19 +1,18 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import TodoList from "./TodoList";
-import { getAllTodos } from "../utils/supabaseFunction";
 
-const Todoapp = () => {
-  const [todos, setTodos] = useState<any>([]);
+async function fetchAllTodos() {
+  const res = await fetch("http://localhost:3000/api/todos", {
+    method: "GET",
+    cache: "no-cache", //SSR
+  });
+  const data = await res.json();
+  return data;
+}
 
-  useEffect(() => {
-    const getTodos = async () => {
-      const todos = await getAllTodos();
-      setTodos(todos);
-      console.log(todos);
-    };
-    getTodos();
-  }, []);
+const Todoapp = async () => {
+  const todos = await fetchAllTodos();
+  console.log(todos);
 
   return (
     <section className="text-center mb-2 text-2xl font-medium">
